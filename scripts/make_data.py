@@ -4,7 +4,7 @@ import sys
 import pandas as pd
 
 
-# глобальные переменные (строчные)
+# глобальные (строчные) переменные
 got_deal_type = ""
 got_location  = ""
 got_homeowner = ""
@@ -83,6 +83,5 @@ def get_df(deal_type, location, rooms, is_by_homeowner) :
                  "total_meters", "price_per_m2", "price_per_month", "commissions",
                  "year_of_construction", "living_meters", "kitchen_meters",
                  "phone", "district", "street", "underground"]
-
-    df_data = pd.DataFrame(lst_data, columns=col_names)
-    df_data.to_csv(r'data.csv', index= False ) # r'../tables/data.csv'
+    df_data   = pd.DataFrame(lst_data, columns=col_names)
+    df_data.to_csv(r'../../data/raw/data.csv', index= False ) # r'../../data/raw/data.csv'

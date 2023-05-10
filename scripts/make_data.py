@@ -1,18 +1,20 @@
-# зависимости
-import cianparser
 import sys
+import os
 import pandas as pd
 
+import cianparser
 
-# глобальные (строчные) переменные
+
 got_deal_type = ""
 got_location  = ""
 got_homeowner = ""
 got_rooms     = []
 
 
-# распечатка доступных локаций
 def get_all_locations() :
+    """Печать доступных локаций
+    :return: ничего
+    """
 
     lst = cianparser.list_cities()
     lst = [i[0] for i in lst]
@@ -23,8 +25,11 @@ def get_all_locations() :
     print()
 
 
-# генерация списка данных
 def get_data(rms) :
+    """Генерация списка данных
+    :param rms: тип квартиры
+    :return: список данных
+    """
 
     global got_deal_type, got_location, got_rooms, got_homeowner
 
@@ -44,18 +49,22 @@ def get_data(rms) :
     return data
 
 
-# создание таблицы
 def get_df(deal_type, location, rooms, is_by_homeowner) :
+    """Создание датасета
+    :param deal_type: тип объявления
+    :param location: населенный пункт
+    :param rooms: тип квартиры
+    :param is_by_homeowner: тип автора объявления
+    :return: ничего
+    """
 
     global got_deal_type, got_location, got_rooms, got_homeowner
 
     got_deal_type = deal_type
     got_location  = location
     got_homeowner = is_by_homeowner
-
     got_rooms     = rooms.split(",")
     got_rooms     = [i.replace(" ", "") for i in got_rooms]
-
 
     for i in range( len(got_rooms) ) :
 
@@ -77,11 +86,16 @@ def get_df(deal_type, location, rooms, is_by_homeowner) :
 
             lst_data = lst_data + lst_tmp
 
-
     col_names = ["author", "author_type", "link", "city", "deal_type",
                  "accommodation_type", "floor", "floors_count", "rooms_count",
                  "total_meters", "price_per_m2", "price_per_month", "commissions",
                  "year_of_construction", "living_meters", "kitchen_meters",
                  "phone", "district", "street", "underground"]
     df_data   = pd.DataFrame(lst_data, columns=col_names)
-    df_data.to_csv(r'../../data/raw/data.csv', index= False ) # r'../../data/raw/data.csv'
+
+    try:
+        os.ulink("../../data/raw/data.csv")
+    except:
+        print("Error while deleting file")
+
+    df_data.to_csv(r'../../data/raw/data.csv', index=False)

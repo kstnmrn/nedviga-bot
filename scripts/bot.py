@@ -1,21 +1,23 @@
-import time
 import telebot
-import misc
 
+import misc
 import make_data
 
 
+location        = ''
+deal_type       = ''
+rooms           = ''
+is_by_homeowner = 0
 token           = misc.token
 bot             = telebot.TeleBot(token)
-
-location        = '';
-deal_type       = '';
-rooms           = '';
-is_by_homeowner = 0
 
 
 @bot.message_handler(commands=['start'])
 def start(message):
+    """Обработка команды start
+    :param message: ответ пользователя на инициируемый ботом текст
+    :return: ничего
+    """
 
     bot.send_message(message.chat.id, 'Укажите населенный пункт:')
     bot.register_next_step_handler(message, get_location)
@@ -23,6 +25,10 @@ def start(message):
 
 @bot.message_handler(content_types=['text'])
 def get_rooms(message):
+    """Получение типа квартиры
+    :param message: ответ пользователя на инициируемый ботом текст
+    :return: ничего
+    """
 
     global rooms;
     rooms = message.text;
@@ -41,6 +47,10 @@ def get_rooms(message):
 
 @bot.message_handler(content_types=['text'])
 def get_location(message):
+    """Получение населенного пункта
+    :param message: ответ пользователя на инициируемый ботом текст
+    :return: ничего
+    """
 
     global location
     location = message.text
@@ -59,6 +69,10 @@ def get_location(message):
 
 @bot.callback_query_handler(func=lambda call: True)
 def callback_worker(call):
+    """Получение is_by_homeowner или deal_type
+    :param call: событие нажатия на кнопку
+    :return: ничего
+    """
 
     global deal_type, location, rooms, is_by_homeowner;
 
@@ -83,5 +97,7 @@ def callback_worker(call):
 
 
 if __name__ == '__main__':
+    """Точка входа
+    """
 
     bot.infinity_polling()
